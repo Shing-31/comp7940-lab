@@ -4,7 +4,7 @@ import configparser
 import logging
 import redis
 global redis1
-
+import os
 
 #[telegram.ext.Updater]("https://python-telegrambot.readthedocs.io/en/latest/telegram.ext.updater.html#telegram.ext.updater.Updater")
 
@@ -15,14 +15,15 @@ global redis1
 
 def main():
 # Load your token and create an Updater for your Bot
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']), use_context=True)
+    #config = configparser.ConfigParser()
+    #config.read('config.ini')
+    #updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']), use_context=True)
+    updater = Updater(token=(os.environ['ACCESS_TOKEN']), use_context=True)
     dispatcher = updater.dispatcher
 
     global redis1
-    redis1 = redis.Redis(host=(config['REDIS']['HOST']), password=(config['REDIS']['PASSWORD']), port=(config['REDIS']['REDISPORT']))
-
+    #redis1 = redis.Redis(host=(config['REDIS']['HOST']), password=(config['REDIS']['PASSWORD']), port=(config['REDIS']['REDISPORT']))
+    redis1 = redis.Redis(host=(os.environ['HOST']), password=(os.environ['PASSWORD']), port=(os.environ['REDISPORT']))
 
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
     echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
